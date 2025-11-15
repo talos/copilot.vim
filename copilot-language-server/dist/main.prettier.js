@@ -140481,7 +140481,7 @@ var Eer = "github.copilot.completions.quotaExceeded",
     }
     async handleError(e, r, n, o, s) {
       let c = await o.text();
-      if (o.status === 402) {
+      if (o.status === 402 && !process.env.OPENROUTER_API_KEY) {
         ((this.#e = "monthly free code completions exhausted"),
           r.setError("Completions limit reached", {
             command: Eer,
@@ -153167,7 +153167,7 @@ var bg = new tt("fetchChat"),
         };
       if (n.status === 424) return { type: "failedDependency", reason: o };
       let s = await e.get(Wt).getToken();
-      if (n.status === 402) {
+      if (n.status === 402 && !process.env.OPENROUTER_API_KEY) {
         if (o.includes("free_quota_exceeded")) {
           let u = n.headers.get("retry-after");
           return {
