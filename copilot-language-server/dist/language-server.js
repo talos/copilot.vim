@@ -20,4 +20,4 @@ if (err !== undefined) {
     process.exit(minNodeVersion);
 }
 
-require('./main').main();
+require('./main.prettier').main();

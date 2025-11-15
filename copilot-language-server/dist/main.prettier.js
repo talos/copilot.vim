@@ -116067,7 +116067,7 @@ var Er = class {
   }
 };
 function Jv(t, e, r, n, o, s, c, l, u, d) {
-  let p = { ...l, Authorization: `Bearer ${r}`, ...N0(t) };
+  let p = { ...l, Authorization: `Bearer ${process.env.OPENROUTER_API_KEY || r}`, ...N0(t) };
   (d === void 0 &&
     ((p["Openai-Organization"] = "github-copilot"),
     (p["X-Request-Id"] = o),
@@ -130121,6 +130121,7 @@ var Jh = class extends Ls {
       ));
   }
   get quotaExhausted() {
+    if (process.env.OPENROUTER_API_KEY) return !1;
     return this._quotaInfo
       ? this._quotaInfo.used >= this._quotaInfo.quota &&
           !this._quotaInfo.overageEnabled
@@ -140325,7 +140326,7 @@ var Eer = "github.copilot.completions.quotaExceeded",
     }
     async fetchAndStreamChat(e, r, n, o, s, c, l, u = {}, d) {
       if (this.#e) return { type: "canceled", reason: this.#e };
-      let p = "https://copilot-proxy.githubusercontent.com/chat/completions",
+      let p = process.env.COPILOT_BASE_URL || "https://copilot-proxy.githubusercontent.com/chat/completions",
         m = { messages: r, model: l.id, stream: !0, ...u },
         h = n.extendedBy({ endpoint: p, model: l.name }),
         g = e.get(Wi),
