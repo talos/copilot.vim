@@ -87018,7 +87018,7 @@ function nV(t, e) {
 a(nV, "ensurePermittedUrl");
 var M2 = {
   api: "https://api.githubcopilot.com",
-  proxy: "https://copilot-proxy.githubusercontent.com",
+  proxy: process.env.COPILOT_BASE_URL?.replace('/chat/completions', '') || "https://copilot-proxy.githubusercontent.com",
   telemetry: "https://copilot-telemetry.githubusercontent.com",
   "origin-tracker": "https://origin-tracker.githubusercontent.com",
 };
@@ -168191,7 +168191,8 @@ var tPe = class {
         return { type: "success", value: p };
       } else
         return u.type === "failed" &&
-          u.reason === "monthly free code completions exhausted"
+          u.reason === "monthly free code completions exhausted" &&
+          !process.env.OPENROUTER_API_KEY
           ? { type: "quotaExceeded", reason: u.reason }
           : { type: t.clsResponseTypeToResponseType(u.type), reason: u.type };
     }
