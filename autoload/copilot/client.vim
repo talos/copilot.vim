@@ -366,6 +366,11 @@ endfunction
 function! s:OnErr(instance, ch, line, ...) abort
   if !has_key(a:instance, 'serverInfo')
     call copilot#logger#Bare('<-! ' . a:line)
+    " Capture stderr lines for startup errors
+    if !has_key(a:instance, 'stderr_lines')
+      let a:instance.stderr_lines = []
+    endif
+    call add(a:instance.stderr_lines, a:line)
   endif
 endfunction
 
@@ -382,6 +387,9 @@ function! s:OnExit(instance, code, ...) abort
     let message = 'Node.js too old.  ' .
           \ (get(a:instance.node, 0, 'node') ==# 'node' ? 'Upgrade' : 'Change g:copilot_node_command') .
           \ ' to ' . a:code . '.x or newer'
+  elseif has_key(a:instance, 'stderr_lines') && len(a:instance.stderr_lines) > 0
+    " Use stderr output as the error message if available
+    let message = join(a:instance.stderr_lines, "\n")
   endif
   if !has_key(a:instance, 'serverInfo') && !has_key(a:instance, 'startup_error')
     let a:instance.startup_error = message
